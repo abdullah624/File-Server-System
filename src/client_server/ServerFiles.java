@@ -36,7 +36,7 @@ import javax.swing.table.DefaultTableModel;
  * @author abdullah
  */
 public class ServerFiles extends javax.swing.JFrame {
-    
+
     ArrayList<Files> myfiles;
     int id = -1;
     static DataInputStream dataInputStream;
@@ -51,12 +51,12 @@ public class ServerFiles extends javax.swing.JFrame {
     public ServerFiles() {
         initComponents();
     }
-    
+
     public ServerFiles(ArrayList<Files> myfiles, DataOutputStream dataOutputStream, DataInputStream dataInputStream) {
         initComponents();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         totalfile_row = myfiles.size();
-        System.out.println(myfiles.size());
+        //System.out.println(myfiles.size());
         count = 1;
         this.myfiles = myfiles;
         this.dataOutputStream = dataOutputStream;
@@ -69,7 +69,7 @@ public class ServerFiles extends javax.swing.JFrame {
             serverFileList.getColumnModel().getColumn(columnIndex).setCellRenderer(centerRenderer);
         }
         if (count > 1) {
-               dModel.insertRow(5, new Object[]{myfiles.get(5).getId(), myfiles.get(5).getName()});
+            dModel.insertRow(5, new Object[]{myfiles.get(5).getId(), myfiles.get(5).getName()});
         }
         for (Files myfile : myfiles) {
             count++;
@@ -91,8 +91,10 @@ public class ServerFiles extends javax.swing.JFrame {
         serverFileList = new javax.swing.JTable();
         downloadFile = new javax.swing.JButton();
         deleteFile = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setLocation(new java.awt.Point(700, 300));
 
         serverFileList.setAutoCreateRowSorter(true);
         serverFileList.setModel(new javax.swing.table.DefaultTableModel(
@@ -100,7 +102,7 @@ public class ServerFiles extends javax.swing.JFrame {
 
             },
             new String [] {
-                "                                Id", "                      File Name"
+                "Id", "File Name"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -117,10 +119,6 @@ public class ServerFiles extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(serverFileList);
-        if (serverFileList.getColumnModel().getColumnCount() > 0) {
-            serverFileList.getColumnModel().getColumn(0).setResizable(false);
-            serverFileList.getColumnModel().getColumn(1).setResizable(false);
-        }
 
         downloadFile.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
         downloadFile.setText("Download");
@@ -138,27 +136,36 @@ public class ServerFiles extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("File List");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(87, 87, 87)
-                .addComponent(downloadFile, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 126, Short.MAX_VALUE)
-                .addComponent(deleteFile, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(95, 95, 95))
+                .addGap(123, 123, 123)
+                .addComponent(downloadFile)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 86, Short.MAX_VALUE)
+                .addComponent(deleteFile)
+                .addGap(132, 132, 132))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(187, 187, 187)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(downloadFile)
                     .addComponent(deleteFile))
@@ -178,10 +185,10 @@ public class ServerFiles extends javax.swing.JFrame {
                     }
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Please Select a file first", "Alert", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "File not selected!", "Alert", 1);
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Table is empty !", "Alert", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "No files here to download.", "Alert", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_downloadFileActionPerformed
 
@@ -190,21 +197,21 @@ public class ServerFiles extends javax.swing.JFrame {
             if (id != -1) {
                 for (Files myFile : myfiles) {
                     if (myFile.getName() == dModel.getValueAt(serverFileList.getSelectedRow(), 1)) {
-                        JFrame jfRemove = createFrameToRemove(myFile.getName(), myFile.getData(), myFile.getFileExtension());
+                        JFrame jfRemove = frameToDelete(myFile.getName(), myFile.getData(), myFile.getFileExtension());
                         jfRemove.setVisible(true);
                     }
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Please Select a file first", "Alert", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "File not selected!", "Alert", 1);
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Table is empty !", "Alert", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "No files here to delete.", "Alert", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_deleteFileActionPerformed
 
     private void serverFileListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_serverFileListMouseClicked
         id = serverFileList.getSelectedRow();
-        System.out.println(serverFileList.getSelectedRow() + " " + serverFileList.getSelectedColumn());
+        //System.out.println(serverFileList.getSelectedRow() + " " + serverFileList.getSelectedColumn());
     }//GEN-LAST:event_serverFileListMouseClicked
 
     /**
@@ -241,27 +248,24 @@ public class ServerFiles extends javax.swing.JFrame {
             }
         });
     }
-    
+
     public static JFrame createFrame(final String fileName, final byte[] fileData, String fileExtension) {
 
         final JFrame jFrame = new JFrame("File Downloader");
-        jFrame.setSize(500, 400);
+        jFrame.setSize(700, 500);
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.Y_AXIS));
-        JLabel jlTitle = new JLabel("Download File : " + fileName);
-        jlTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
-        jlTitle.setFont(new Font("Courgette", Font.BOLD, 25));
-        jlTitle.setBorder(new EmptyBorder(20, 0, 10, 0));
-        JLabel jlPrompt = new JLabel("Are you sure you want to download " + fileName + "?");
-        jlPrompt.setFont(new Font("Courgette", Font.BOLD, 20));
+
+        JLabel jlPrompt = new JLabel("Are you sure you want to download '" + fileName + "'?");
+        jlPrompt.setFont(new Font("Courgette", Font.BOLD, 15));
         jlPrompt.setBorder(new EmptyBorder(20, 0, 10, 0));
         jlPrompt.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JButton jbYes = new JButton("Yes");
-        jbYes.setPreferredSize(new Dimension(100, 50));
-        jbYes.setFont(new Font("Courgette", Font.BOLD, 20));
-        JButton jbNo = new JButton("No");
+        JButton jbYes = new JButton("Download");
+        jbYes.setPreferredSize(new Dimension(110, 50));
+        jbYes.setFont(new Font("Courgette", Font.BOLD, 13));
+        JButton jbNo = new JButton("Cancel");
         jbNo.setPreferredSize(new Dimension(100, 50));
-        jbNo.setFont(new Font("Courgette", Font.BOLD, 20));
+        jbNo.setFont(new Font("Courgette", Font.BOLD, 14));
         JLabel jlFileContent = new JLabel();
         jlFileContent.setAlignmentX(Component.CENTER_ALIGNMENT);
         JPanel jpButtons = new JPanel();
@@ -278,12 +282,12 @@ public class ServerFiles extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 JFileChooser chooser = new JFileChooser();
                 chooser.setCurrentDirectory(new java.io.File("."));
-                chooser.setDialogTitle("choosertitle");
+                chooser.setDialogTitle("Select File");
                 chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 chooser.setAcceptAllFileFilterUsed(false);
                 File fileToDownload = null;
                 if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-                    System.out.println(chooser.getSelectedFile());
+                    //System.out.println(chooser.getSelectedFile());
                     fileToDownload = new File(chooser.getSelectedFile() + "/" + fileName);
                     try {
                         FileOutputStream fileOutputStream = new FileOutputStream(fileToDownload);
@@ -294,7 +298,7 @@ public class ServerFiles extends javax.swing.JFrame {
                         ex.printStackTrace();
                     }
                 } else {
-                    System.out.println("No Selection ");
+                    //System.out.println("No Selection ");
                 }
 
             }
@@ -305,35 +309,32 @@ public class ServerFiles extends javax.swing.JFrame {
                 jFrame.dispose();
             }
         });
-        jPanel.add(jlTitle);
+
         jPanel.add(jlPrompt);
-        jPanel.add(jlFileContent);
         jPanel.add(jpButtons);
+        jPanel.add(jlFileContent);
         jFrame.add(jPanel);
         return jFrame;
 
     }
-    
-    public static JFrame createFrameToRemove(final String fileName, final byte[] fileData, String fileExtension) {
+
+    public static JFrame frameToDelete(final String fileName, final byte[] fileData, String fileExtension) {
 
         final JFrame jFrame = new JFrame("File Remover");
-        jFrame.setSize(500, 400);
+        jFrame.setSize(700, 500);
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.Y_AXIS));
-        JLabel jlTitle = new JLabel("Remove File : " + fileName);
-        jlTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
-        jlTitle.setFont(new Font("Courgette", Font.BOLD, 25));
-        jlTitle.setBorder(new EmptyBorder(20, 0, 10, 0));
-        JLabel jlPrompt = new JLabel("Are you sure you want to remove " + fileName + "?");
-        jlPrompt.setFont(new Font("Courgette", Font.BOLD, 20));
+
+        JLabel jlPrompt = new JLabel("Are you sure you want to delete '" + fileName + "'?");
+        jlPrompt.setFont(new Font("Courgette", Font.BOLD, 15));
         jlPrompt.setBorder(new EmptyBorder(20, 0, 10, 0));
         jlPrompt.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JButton jbYes = new JButton("Yes");
+        JButton jbYes = new JButton("Delete");
         jbYes.setPreferredSize(new Dimension(100, 50));
-        jbYes.setFont(new Font("Courgette", Font.BOLD, 20));
-        JButton jbNo = new JButton("No");
+        jbYes.setFont(new Font("Courgette", Font.BOLD, 15));
+        JButton jbNo = new JButton("Cancel");
         jbNo.setPreferredSize(new Dimension(100, 50));
-        jbNo.setFont(new Font("Courgette", Font.BOLD, 20));
+        jbNo.setFont(new Font("Courgette", Font.BOLD, 15));
         JLabel jlFileContent = new JLabel();
         jlFileContent.setAlignmentX(Component.CENTER_ALIGNMENT);
         JPanel jpButtons = new JPanel();
@@ -367,10 +368,10 @@ public class ServerFiles extends javax.swing.JFrame {
                 jFrame.dispose();
             }
         });
-        jPanel.add(jlTitle);
+
         jPanel.add(jlPrompt);
-        jPanel.add(jlFileContent);
         jPanel.add(jpButtons);
+        jPanel.add(jlFileContent);
         jFrame.add(jPanel);
         return jFrame;
 
@@ -379,6 +380,7 @@ public class ServerFiles extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton deleteFile;
     private javax.swing.JButton downloadFile;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private static javax.swing.JTable serverFileList;
     // End of variables declaration//GEN-END:variables

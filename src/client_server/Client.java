@@ -5,9 +5,6 @@
  */
 package client_server;
 
-
-import static client_server.Server.dataOutputStream;
-import static client_server.Server.serverSocket;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -35,7 +32,7 @@ import javax.swing.border.EmptyBorder;
  * @author abdullah
  */
 public class Client extends javax.swing.JFrame {
-    
+
     static Socket socket;
     static DataInputStream dataInputStream;
     static DataOutputStream dataOutputStream;
@@ -45,6 +42,7 @@ public class Client extends javax.swing.JFrame {
     FileInputStream fileInputStream;
     static ArrayList<Files> myFiles = new ArrayList<>();
     static boolean connected = false;
+    static boolean visible = false;
 
     /**
      * Creates new form Client
@@ -64,15 +62,18 @@ public class Client extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        portNumber = new javax.swing.JTextField();
         connect = new javax.swing.JButton();
         selectFile = new javax.swing.JButton();
         uploadFile = new javax.swing.JButton();
         serversFiles = new javax.swing.JToggleButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         notificationArea = new javax.swing.JTextArea();
+        clear = new javax.swing.JButton();
+        portNumber = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(0, 102, 102));
+        setLocation(new java.awt.Point(1350, 480));
 
         jLabel1.setFont(new java.awt.Font("DejaVu Sans", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -80,13 +81,6 @@ public class Client extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("DejaVu Sans", 1, 16)); // NOI18N
         jLabel2.setText("Port Number :");
-
-        portNumber.setFont(new java.awt.Font("DejaVu Sans", 0, 16)); // NOI18N
-        portNumber.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                portNumberActionPerformed(evt);
-            }
-        });
 
         connect.setFont(new java.awt.Font("DejaVu Sans", 1, 16)); // NOI18N
         connect.setText("Connect");
@@ -121,67 +115,83 @@ public class Client extends javax.swing.JFrame {
         });
 
         notificationArea.setColumns(20);
+        notificationArea.setFont(new java.awt.Font("DejaVu Sans", 0, 16)); // NOI18N
         notificationArea.setRows(5);
         jScrollPane1.setViewportView(notificationArea);
+
+        clear.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
+        clear.setText("Clear");
+        clear.setAlignmentX(0.5F);
+        clear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearActionPerformed(evt);
+            }
+        });
+
+        portNumber.setFont(new java.awt.Font("DejaVu Sans", 1, 16)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(portNumber)
-                .addGap(18, 18, 18)
-                .addComponent(connect, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(selectFile, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(uploadFile, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(12, 12, 12)
-                .addComponent(serversFiles, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addComponent(selectFile))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addComponent(uploadFile)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                        .addComponent(serversFiles))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(portNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(connect)))
+                .addGap(28, 28, 28))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1)
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(clear)
+                .addGap(27, 27, 27))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(portNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(connect))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(connect)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(portNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(16, 16, 16)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(selectFile)
                     .addComponent(uploadFile)
                     .addComponent(serversFiles))
-                .addGap(24, 24, 24)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(clear)
+                .addGap(9, 9, 9))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void portNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_portNumberActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_portNumberActionPerformed
-
     private void connectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectActionPerformed
         try {
-            // TODO add your handling code here:
             String port = portNumber.getText().trim();
             if (!port.isEmpty()) {
                 int PORT = Integer.parseInt(port);
@@ -191,46 +201,48 @@ public class Client extends javax.swing.JFrame {
                 connected = true;
                 connect.hide();
                 portNumber.setText("");
-                notificationArea.setText("\nConnected!");
+                notificationArea.append("\n  Connected to Server!\n");
                 portNumber.setEnabled(false);
             } else {
-                JOptionPane.showMessageDialog(null, "Please Provide IP Address and Port number ", "Alert", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "            Enter port number.", "Alert!", -1);
                 connected = false;
             }
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "IP AddressOr Port Is Invalid !", "Alert", JOptionPane.WARNING_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Wrong port number!", "Alert!", 0);
+            portNumber.setText("");
             connected = false;
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_connectActionPerformed
-
+    /// have to redraw the server files list
     private void serversFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serversFilesActionPerformed
         if (connected) {
-            ServersAllFile();
+            serverFileList();
             new ServerFiles(myFiles, dataOutputStream, dataInputStream).setVisible(true);
+            
+            
         } else {
-            JOptionPane.showMessageDialog(null, "Please established your socket connection !", "Alert", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Server not connected!", "Alert!", 2);
         }
     }//GEN-LAST:event_serversFilesActionPerformed
 
     private void selectFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectFileActionPerformed
         if (connected) {
             JFileChooser jFileChooser = new JFileChooser();
-            jFileChooser.setDialogTitle("Choose a file to send.");
+            jFileChooser.setDialogTitle("Select a file.");
             if (jFileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                 fileToUpload[0] = jFileChooser.getSelectedFile();
-                notificationArea.append("The file you want to send is: " + fileToUpload[0].getName());
+                notificationArea.setText("\n  '" + fileToUpload[0].getName() + "' selected.\n");
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Please established your socket connection !", "Alert", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Connect to server.", "Alert!", 1);
         }
     }//GEN-LAST:event_selectFileActionPerformed
 
     private void uploadFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadFileActionPerformed
         if (connected) {
             if (fileToUpload[0] == null) {
-                notificationArea.append("\nPlease choose a file to send first!");
-                JOptionPane.showMessageDialog(null, "Please choose a file to send first!", "Alert", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Select a file.", "Alert!", 1);
             } else {
                 try {
                     fileInputStream = new FileInputStream(fileToUpload[0]);
@@ -243,7 +255,8 @@ public class Client extends javax.swing.JFrame {
                     } while (ch != -1);
                     fileInputStream.close();
                     if (ch == -1) {
-                        notificationArea.append("\nFile Successfully Uploaded");
+                        notificationArea.append("  File successfully uploaded.\n");
+                        fileToUpload[0] = null;
                     }
 
                 } catch (IOException ex) {
@@ -251,15 +264,19 @@ public class Client extends javax.swing.JFrame {
                 }
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Please established your socket connection !", "Alert", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "File not selected!", "Alert!", 2);
         }
     }//GEN-LAST:event_uploadFileActionPerformed
+
+    private void clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearActionPerformed
+        notificationArea.setText("");
+    }//GEN-LAST:event_clearActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -267,29 +284,17 @@ public class Client extends javax.swing.JFrame {
             }
         });
     }
-    
+
     public static String getFileExtension(String fileName) {
         int i = fileName.lastIndexOf('.');
         if (i > 0) {
             return fileName.substring(i + 1);
         } else {
-            return "Extension not found.";
+            return "Extension not found.\n";
         }
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton connect;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea notificationArea;
-    private javax.swing.JTextField portNumber;
-    private javax.swing.JButton selectFile;
-    private javax.swing.JToggleButton serversFiles;
-    private javax.swing.JButton uploadFile;
-    // End of variables declaration//GEN-END:variables
-    
-    private void ServersAllFile() {
+    private void serverFileList() {
         try {
             dataOutputStream.writeUTF("files-on-server");
             myFiles.clear();
@@ -309,11 +314,24 @@ public class Client extends javax.swing.JFrame {
                     }
                     Files myfile = new Files(i, fileName, fileContentBytes, getFileExtension(fileName));
                     myFiles.add(myfile);
-                    //System.out.println(myfile.getId() + " " + myfile.getName() + " " + myfile.getData() + " " + myfile.getFileExtension());
                 }
             }
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton clear;
+    private javax.swing.JButton connect;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea notificationArea;
+    private javax.swing.JTextField portNumber;
+    private javax.swing.JButton selectFile;
+    private javax.swing.JToggleButton serversFiles;
+    private javax.swing.JButton uploadFile;
+    // End of variables declaration//GEN-END:variables
+
 }
