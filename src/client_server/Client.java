@@ -211,7 +211,7 @@ public class Client extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Wrong port number!", "Alert!", 0);
             portNumber.setText("");
             connected = false;
-            //Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_connectActionPerformed
     /// have to redraw the server files list

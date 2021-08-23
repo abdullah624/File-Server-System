@@ -248,36 +248,44 @@ public class ServerFiles extends javax.swing.JFrame {
             }
         });
     }
-
+    //File Downloader Promt frame creation
     public static JFrame createFrame(final String fileName, final byte[] fileData, String fileExtension) {
 
         final JFrame jFrame = new JFrame("File Downloader");
-        jFrame.setSize(700, 500);
+        jFrame.setSize(600, 500);
         JPanel jPanel = new JPanel();
+        JPanel jPanel1 = new JPanel();
+        JPanel jPanel2 = new JPanel();
+        JPanel jPanel3 = new JPanel();
         jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.Y_AXIS));
-
+        
         JLabel jlPrompt = new JLabel("Are you sure you want to download '" + fileName + "'?");
         jlPrompt.setFont(new Font("Courgette", Font.BOLD, 15));
         jlPrompt.setBorder(new EmptyBorder(20, 0, 10, 0));
         jlPrompt.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JButton jbYes = new JButton("Download");
-        jbYes.setPreferredSize(new Dimension(110, 50));
-        jbYes.setFont(new Font("Courgette", Font.BOLD, 13));
-        JButton jbNo = new JButton("Cancel");
-        jbNo.setPreferredSize(new Dimension(100, 50));
-        jbNo.setFont(new Font("Courgette", Font.BOLD, 14));
+        
+        //Downloader confirmation buttons creation
+        JButton jbDownload = new JButton("Download");
+        jbDownload.setPreferredSize(new Dimension(110, 50));
+        jbDownload.setFont(new Font("Courgette", Font.BOLD, 13));
+        JButton jbCancel = new JButton("Cancel");
+        jbCancel.setPreferredSize(new Dimension(100, 50));
+        jbCancel.setFont(new Font("Courgette", Font.BOLD, 14));
         JLabel jlFileContent = new JLabel();
         jlFileContent.setAlignmentX(Component.CENTER_ALIGNMENT);
         JPanel jpButtons = new JPanel();
         jpButtons.setBorder(new EmptyBorder(20, 0, 10, 0));
-        jpButtons.add(jbYes);
-        jpButtons.add(jbNo);
+        jpButtons.add(jbDownload);
+        jpButtons.add(jbCancel);
+        
+        //File preview for images while confirmation
         if (fileExtension.equalsIgnoreCase("png") || fileExtension.equalsIgnoreCase("jpg") || fileExtension.equalsIgnoreCase("jpeg")
                 || fileExtension.equalsIgnoreCase("gif") || fileExtension.equalsIgnoreCase("tiff")) {
             jlFileContent.setIcon(new ImageIcon(fileData));
         }
 
-        jbYes.addActionListener(new ActionListener() {
+        //Path selection for downloading
+        jbDownload.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFileChooser chooser = new JFileChooser();
@@ -287,7 +295,6 @@ public class ServerFiles extends javax.swing.JFrame {
                 chooser.setAcceptAllFileFilterUsed(false);
                 File fileToDownload = null;
                 if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-                    //System.out.println(chooser.getSelectedFile());
                     fileToDownload = new File(chooser.getSelectedFile() + "/" + fileName);
                     try {
                         FileOutputStream fileOutputStream = new FileOutputStream(fileToDownload);
@@ -298,55 +305,67 @@ public class ServerFiles extends javax.swing.JFrame {
                         ex.printStackTrace();
                     }
                 } else {
-                    //System.out.println("No Selection ");
+                    JOptionPane.showMessageDialog(null, "Directory not selected!", "Alert!", 2);
                 }
 
             }
         });
-        jbNo.addActionListener(new ActionListener() {
+        
+        //Download cancelation
+        jbCancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 jFrame.dispose();
             }
         });
 
-        jPanel.add(jlPrompt);
-        jPanel.add(jpButtons);
-        jPanel.add(jlFileContent);
+        //Binding components with Panel and added to frame
+        jPanel1.add(jlPrompt);
+        jPanel2.add(jpButtons);
+        jPanel3.add(jlFileContent);
+        jPanel.add(jPanel1);
+        jPanel.add(jPanel2);
+        jPanel.add(jPanel3);
         jFrame.add(jPanel);
         return jFrame;
 
     }
 
+    //File Remover Promt frame creation
     public static JFrame frameToDelete(final String fileName, final byte[] fileData, String fileExtension) {
 
         final JFrame jFrame = new JFrame("File Remover");
         jFrame.setSize(700, 500);
         JPanel jPanel = new JPanel();
+        JPanel jPanel1 = new JPanel();
+        JPanel jPanel2 = new JPanel();
+        JPanel jPanel3 = new JPanel();
         jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.Y_AXIS));
 
         JLabel jlPrompt = new JLabel("Are you sure you want to delete '" + fileName + "'?");
         jlPrompt.setFont(new Font("Courgette", Font.BOLD, 15));
         jlPrompt.setBorder(new EmptyBorder(20, 0, 10, 0));
         jlPrompt.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JButton jbYes = new JButton("Delete");
-        jbYes.setPreferredSize(new Dimension(100, 50));
-        jbYes.setFont(new Font("Courgette", Font.BOLD, 15));
-        JButton jbNo = new JButton("Cancel");
-        jbNo.setPreferredSize(new Dimension(100, 50));
-        jbNo.setFont(new Font("Courgette", Font.BOLD, 15));
+        
+        //Remover confirmation buttons creation
+        JButton jbDelete = new JButton("Delete");
+        jbDelete.setPreferredSize(new Dimension(100, 50));
+        jbDelete.setFont(new Font("Courgette", Font.BOLD, 15));
+        JButton jbCancel = new JButton("Cancel");
+        jbCancel.setPreferredSize(new Dimension(100, 50));
+        jbCancel.setFont(new Font("Courgette", Font.BOLD, 15));
         JLabel jlFileContent = new JLabel();
         jlFileContent.setAlignmentX(Component.CENTER_ALIGNMENT);
         JPanel jpButtons = new JPanel();
         jpButtons.setBorder(new EmptyBorder(20, 0, 10, 0));
-        jpButtons.add(jbYes);
-        jpButtons.add(jbNo);
+        jpButtons.add(jbDelete);
+        jpButtons.add(jbCancel);
         if (fileExtension.equalsIgnoreCase("png") || fileExtension.equalsIgnoreCase("jpg") || fileExtension.equalsIgnoreCase("jpeg")
                 || fileExtension.equalsIgnoreCase("gif") || fileExtension.equalsIgnoreCase("tiff")) {
             jlFileContent.setIcon(new ImageIcon(fileData));
         }
 
-        jbYes.addActionListener(new ActionListener() {
+        jbDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -362,16 +381,19 @@ public class ServerFiles extends javax.swing.JFrame {
                 }
             }
         });
-        jbNo.addActionListener(new ActionListener() {
+        jbCancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 jFrame.dispose();
             }
         });
 
-        jPanel.add(jlPrompt);
-        jPanel.add(jpButtons);
-        jPanel.add(jlFileContent);
+        jPanel1.add(jlPrompt);
+        jPanel2.add(jpButtons);
+        jPanel3.add(jlFileContent);
+        jPanel.add(jPanel1);
+        jPanel.add(jPanel2);
+        jPanel.add(jPanel3);
         jFrame.add(jPanel);
         return jFrame;
 

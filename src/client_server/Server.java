@@ -171,7 +171,7 @@ public class Server extends javax.swing.JFrame {
                 }
             }
         } catch (Exception ex) {
-            //Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
             notificationArea.append("\n  Client disconnected!\n");
         }
 
