@@ -33,6 +33,7 @@ import javax.swing.border.EmptyBorder;
  */
 public class Client extends javax.swing.JFrame {
 
+    //Variable declaration
     static Socket socket;
     static DataInputStream dataInputStream;
     static DataOutputStream dataOutputStream;
@@ -190,6 +191,7 @@ public class Client extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //Connection eslablistment to Server
     private void connectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectActionPerformed
         try {
             String port = portNumber.getText().trim();
@@ -214,7 +216,8 @@ public class Client extends javax.swing.JFrame {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_connectActionPerformed
-    /// have to redraw the server files list
+    
+    ///Drawing the table of server files with Downloading and Deletion option
     private void serversFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serversFilesActionPerformed
         if (connected) {
             serverFileList();
@@ -226,6 +229,7 @@ public class Client extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_serversFilesActionPerformed
 
+    ///Selection of file to upload
     private void selectFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectFileActionPerformed
         if (connected) {
             JFileChooser jFileChooser = new JFileChooser();
@@ -239,6 +243,7 @@ public class Client extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_selectFileActionPerformed
 
+    ///Sending selected file to Server
     private void uploadFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadFileActionPerformed
         if (connected) {
             if (fileToUpload[0] == null) {
@@ -260,7 +265,7 @@ public class Client extends javax.swing.JFrame {
                     }
 
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "There was a problem while uploading the file!", "Alert!", 2);
                 }
             }
         } else {
@@ -268,6 +273,7 @@ public class Client extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_uploadFileActionPerformed
 
+    ///Cleaning notification area
     private void clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearActionPerformed
         notificationArea.setText("");
     }//GEN-LAST:event_clearActionPerformed
@@ -275,6 +281,8 @@ public class Client extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
+    
+    ///Main method starts here
     public static void main(String args[]) {
 
         /* Create and display the form */
@@ -285,6 +293,7 @@ public class Client extends javax.swing.JFrame {
         });
     }
 
+    ///Getter for file extension
     public static String getFileExtension(String fileName) {
         int i = fileName.lastIndexOf('.');
         if (i > 0) {
@@ -294,6 +303,7 @@ public class Client extends javax.swing.JFrame {
         }
     }
 
+    
     private void serverFileList() {
         try {
             dataOutputStream.writeUTF("files-on-server");

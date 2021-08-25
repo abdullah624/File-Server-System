@@ -98,6 +98,7 @@ public class Server extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //Notification text area cleaning
     private void startServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startServerActionPerformed
         notificationArea.setText("");
     }//GEN-LAST:event_startServerActionPerformed
@@ -106,7 +107,7 @@ public class Server extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     
-    //Main method starts here...
+    //Main method starts here
     public static void main(String args[]) {
 
         try {
@@ -116,9 +117,15 @@ public class Server extends javax.swing.JFrame {
                     new Server().setVisible(true);
                 }
             });
+            
+            //Server creates serversocket and waits for client
             serverSocket = new ServerSocket(1111);
+            
+            //Responds to clients request and stablishes connection
             socket = serverSocket.accept();
             notificationArea.setText("\n  Client connected!");
+            
+            //Starts communicaton
             dataInputStream = new DataInputStream(socket.getInputStream());
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
@@ -171,7 +178,7 @@ public class Server extends javax.swing.JFrame {
                 }
             }
         } catch (Exception ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
             notificationArea.append("\n  Client disconnected!\n");
         }
 

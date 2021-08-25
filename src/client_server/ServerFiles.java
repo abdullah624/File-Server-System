@@ -37,6 +37,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ServerFiles extends javax.swing.JFrame {
 
+    ///Variable declaration
     ArrayList<Files> myfiles;
     int id = -1;
     static DataInputStream dataInputStream;
@@ -52,11 +53,11 @@ public class ServerFiles extends javax.swing.JFrame {
         initComponents();
     }
 
+    ///Constructor to draw Server file list
     public ServerFiles(ArrayList<Files> myfiles, DataOutputStream dataOutputStream, DataInputStream dataInputStream) {
         initComponents();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         totalfile_row = myfiles.size();
-        //System.out.println(myfiles.size());
         count = 1;
         this.myfiles = myfiles;
         this.dataOutputStream = dataOutputStream;
@@ -175,6 +176,7 @@ public class ServerFiles extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    ///Driver method for invoking Download option frame
     private void downloadFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadFileActionPerformed
         if (serverFileList.getRowCount() != 0) {
             if (id != -1) {
@@ -192,6 +194,7 @@ public class ServerFiles extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_downloadFileActionPerformed
 
+     ///Driver method for invoking Deletion option frame
     private void deleteFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteFileActionPerformed
         if (serverFileList.getRowCount() != 0) {
             if (id != -1) {
@@ -209,36 +212,22 @@ public class ServerFiles extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_deleteFileActionPerformed
 
+    ///File selection from server file list
     private void serverFileListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_serverFileListMouseClicked
         id = serverFileList.getSelectedRow();
-        //System.out.println(serverFileList.getSelectedRow() + " " + serverFileList.getSelectedColumn());
     }//GEN-LAST:event_serverFileListMouseClicked
 
     /**
      * @param args the command line arguments
      */
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ServerFiles.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ServerFiles.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ServerFiles.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ServerFiles.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
+        
         //</editor-fold>
 
         /* Create and display the form */
